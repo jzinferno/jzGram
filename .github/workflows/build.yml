@@ -1,0 +1,48 @@
+name: Build tests
+
+on: [push]
+
+jobs:
+  linux:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: [debug]
+        include:
+          - type: debug
+            afat: assembleAfatDebug
+          - type: release
+            afat: assembleAfatRelease
+    steps:
+      - name: Checkout.
+        uses: actions/checkout@v3.1.0
+        with:
+          submodules: true
+
+      - name: Setup Java.
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup NDK.
+        uses: nttld/setup-ndk@v1.4.2
+        id: setup-ndk
+        with:
+          ndk-version: r21e
+          link-to-sdk: true
+
+      - name: Build.
+        run: |
+          ###
+          vars=gradle.properties
+
+          echo "APP_ID=${{ secrets.APP_ID }}" >> $vars
+          echo "APP_HASH=${{ secrets.APP_HASH }}" >> $vars
+          echo "RELEASE_KEY_PASSWORD=${{ secrets.ALIAS_PASS }}" >> $vars
+          echo "RELEASE_KEY_ALIAS=${{ secrets.ALIAS_NAME }}" >> $vars
+
+          sudo apt update
+          sudo apt -y install ninja-build meson unzip pip
+          ./gradlew :TMessagesProj_App:${{ matrix.afat }}
