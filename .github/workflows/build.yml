@@ -35,8 +35,10 @@ jobs:
 
       - name: Build.
         run: |
-          echo "APP_ID=${{ secrets.APP_ID }}" >> gradle.properties
-          echo "APP_HASH=${{ secrets.APP_HASH }}" >> gradle.properties
+          file=TMessagesProj/src/main/java/org/telegram/messenger/IdHashConstans.java
+          echo "public static final int APP_ID = ${{ secrets.APP_ID }};" >> $file
+          echo "public static final String APP_HASH = \"${{ secrets.APP_HASH }};\"" >> $file
+          echo "\}" >> $file
           ./gradlew ${{ matrix.afat }}
 
       - name: Attach debug APK file

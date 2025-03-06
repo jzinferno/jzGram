@@ -16,6 +16,8 @@ import com.android.billingclient.api.ProductDetails;
 
 import java.util.Objects;
 
+import org.telegram.messenger.IdHashConstans;
+
 public class BuildVars {
 
     public static boolean DEBUG_VERSION = BuildConfig.DEBUG_VERSION;
@@ -25,8 +27,8 @@ public class BuildVars {
     public static boolean CHECK_UPDATES = true;
     public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
     public static String BUILD_VERSION_STRING = BuildConfig.BUILD_VERSION_STRING;
-    public static int APP_ID = BuildConfig.JZ_APP_ID;
-    public static String APP_HASH = BuildConfig.JZ_APP_HASH;
+    public static int APP_ID = IdHashConstans.APP_ID;
+    public static String APP_HASH = IdHashConstans.APP_HASH;
 
     // SafetyNet key for Google Identity SDK, set it to empty to disable
     public static String SAFETYNET_KEY = "AIzaSyDqt8P-7F7CPCseMkOiVRgb1LY8RN1bvH8";
