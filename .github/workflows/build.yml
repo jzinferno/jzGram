@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        type: [debug]
+        type: [debug, release]
         include:
           - type: debug
             afat: assembleAfatDebug
@@ -35,14 +35,23 @@ jobs:
 
       - name: Build.
         run: |
-          ###
           vars=gradle.properties
 
-          echo "APP_ID=${{ secrets.APP_ID }}" >> $vars
-          echo "APP_HASH=${{ secrets.APP_HASH }}" >> $vars
-          echo "RELEASE_KEY_PASSWORD=${{ secrets.ALIAS_PASS }}" >> $vars
-          echo "RELEASE_KEY_ALIAS=${{ secrets.ALIAS_NAME }}" >> $vars
+          export APP_ID="${{ secrets.APP_ID }}"
+          export APP_HASH="${{ secrets.APP_HASH }}"
 
-          sudo apt update
-          sudo apt -y install ninja-build meson unzip pip
-          ./gradlew :TMessagesProj_App:${{ matrix.afat }}
+          ./gradlew ${{ matrix.afat }}
+
+      - name: Attach debug APK file
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug_apks
+          path: |
+            ./TMessagesProj_App/build/outputs/apk/afat/debug/*
+
+      - name: Attach release APK file
+        uses: actions/upload-artifact@v4
+        with:
+          name: release_apks
+          path: |
+            ./TMessagesProj_App/build/outputs/apk/afat/release/*
