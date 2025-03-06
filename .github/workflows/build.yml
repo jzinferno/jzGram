@@ -35,11 +35,8 @@ jobs:
 
       - name: Build.
         run: |
-          vars=gradle.properties
-
-          export APP_ID="${{ secrets.APP_ID }}"
-          export APP_HASH="${{ secrets.APP_HASH }}"
-
+          echo "APP_ID=${{ secrets.APP_ID }}" >> gradle.properties
+          echo "APP_HASH=${{ secrets.APP_HASH }}" >> gradle.properties
           ./gradlew ${{ matrix.afat }}
 
       - name: Attach debug APK file

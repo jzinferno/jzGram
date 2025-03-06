@@ -63,6 +63,7 @@ dependencies {
 }
 
 def isWindows = String.valueOf(DefaultNativePlatform.currentOperatingSystem.toFamilyName() == OperatingSystemFamily.WINDOWS)
+
 android {
     compileSdkVersion 34
     buildToolsVersion '34.0.0'
@@ -100,8 +101,8 @@ android {
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
-        buildConfigField 'int', 'APP_ID', "\"${System.getenv('APP_ID') ?: ''}\""
-        buildConfigField 'String', 'APP_HASH', "\"${System.getenv('APP_HASH') ?: ''}\""
+        buildConfigField 'int', 'JZ_APP_ID', APP_ID
+        buildConfigField 'String', 'JZ_APP_HASH', APP_HASH
 
         multiDexEnabled true
 
