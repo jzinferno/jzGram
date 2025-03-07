@@ -37,7 +37,7 @@ jobs:
         run: |
           file=TMessagesProj/src/main/java/org/telegram/messenger/IdHashConstans.java
           echo "public static final int APP_ID = ${{ secrets.APP_ID }};" >> $file
-          echo "public static final String APP_HASH = \"${{ secrets.APP_HASH }};\"" >> $file
+          echo "public static final String APP_HASH = \"${{ secrets.APP_HASH }}\";" >> $file
           echo "}" >> $file
           cat $file
           ./gradlew ${{ matrix.afat }}
