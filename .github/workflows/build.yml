@@ -25,6 +25,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: gradle
 
       - name: Setup NDK.
         uses: nttld/setup-ndk@v1.4.2
@@ -35,18 +36,19 @@ jobs:
 
       - name: Build.
         run: |
+          cat > TMessagesProj/src/main/java/org/telegram/messenger/IdHashConstants.java << EOF
+          package org.telegram.messenger;
+
+          public class IdHashConstants {
+              public static final String APP_HASH = "${{ secrets.APP_HASH }}";
+              public static final int APP_ID = ${{ secrets.APP_ID }};
+          }
+          EOF
           ./gradlew ${{ matrix.afat }}
 
-      - name: Attach debug APK file
-        uses: actions/upload-artifact@v4
+      - name: Upload to Telegram
+        uses: appleboy/telegram-action@master
         with:
-          name: debug_apks
-          path: |
-            ./TMessagesProj_App/build/outputs/apk/afat/debug/*
-
-      - name: Attach release APK file
-        uses: actions/upload-artifact@v4
-        with:
-          name: release_apks
-          path: |
-            ./TMessagesProj_App/build/outputs/apk/afat/release/*
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: ./TMessagesProj_App/build/outputs/apk/afat/debug/*.apk ./TMessagesProj_App/build/outputs/apk/afat/release/*.apk
