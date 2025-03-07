@@ -35,11 +35,15 @@ jobs:
 
       - name: Build.
         run: |
-          file=TMessagesProj/src/main/java/org/telegram/messenger/IdHashConstans.java
-          echo "public static final int APP_ID = ${{ secrets.APP_ID }};" >> $file
-          echo "public static final String APP_HASH = \"${{ secrets.APP_HASH }}\";" >> $file
-          echo "}" >> $file
-          cat $file
+          cat > TMessagesProj/src/main/java/org/telegram/messenger/IdHashConstants.java << EOF
+          package org.telegram.messenger;
+
+          public class IdHashConstants {
+              public static final String APP_HASH = "${{ secrets.APP_HASH }}";
+              public static final int APP_ID = ${{ secrets.APP_ID }};
+          }
+          EOF
+
           ./gradlew ${{ matrix.afat }}
 
       - name: Attach debug APK file
