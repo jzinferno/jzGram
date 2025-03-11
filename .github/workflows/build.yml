@@ -40,6 +40,7 @@ jobs:
       - name: Attach debug APK file
         uses: actions/upload-artifact@v4
         with:
+          if-no-files-found: ignore
           name: debug_apks
           path: |
             ./TMessagesProj_App/build/outputs/apk/afat/debug/*
@@ -47,6 +48,7 @@ jobs:
       - name: Attach release APK file
         uses: actions/upload-artifact@v4
         with:
+          if-no-files-found: ignore
           name: release_apks
           path: |
             ./TMessagesProj_App/build/outputs/apk/afat/release/*
